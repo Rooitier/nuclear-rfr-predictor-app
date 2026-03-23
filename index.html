@@ -389,6 +389,11 @@
   footer span { color: var(--accent); }
 
   /* Citation block */
+
+  .citation-entry { margin-bottom: 0; }
+  .citation-entry-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
+  .citation-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
+
   .citation-block {
     margin-top: 24px;
     background: var(--surface);
@@ -470,7 +475,7 @@
 
   <header>
     <h1>Nuclear Resonance<br><span>Parameter Predictor</span></h1>
-    <p class="subtitle">Predict nuclear resonance parameters from atomic number Z and mass number A using Random Forest models trained on RIPL-3 resonance data. Capote, R. et al. Reference Input Parameter Library (RIPL-3). Nucl. Data Sheets 110, 3107–3214 (2009).</p>
+    <p class="subtitle">Predict nuclear resonance parameters from atomic number Z and mass number A using Random Forest models trained on NNDC resonance data.</p>
   </header>
 
   <!-- Connection status -->
@@ -534,25 +539,49 @@
 
   <!-- Citation -->
   <div class="citation-block">
-    <div class="citation-header">
-      <div class="citation-label">If you use these results, please cite</div>
-      <button class="copy-bibtex-btn" id="copy-btn" onclick="copyBibtex()">Copy BibTeX</button>
+    <div class="citation-label" style="margin-bottom:16px;">If you use these results, please cite</div>
+
+    <!-- Citation 1 -->
+    <div class="citation-entry">
+      <div class="citation-entry-top">
+        <div class="citation-title">Systematics of mean resonance spacing and average radiative width from random forest regression</div>
+        <button class="copy-bibtex-btn" onclick="copyBibtex('bormans')">Copy BibTeX</button>
+      </div>
+      <div class="citation-authors">Bormans, J P &middot; Wyngaardt, S M &middot; Wiedeking, M &middot; Malatji, K L</div>
+      <div class="citation-meta">
+        <span>Journal of Physics: Conference Series</span>
+        <span>&middot;</span>
+        <span>Vol. 2586, p. 012156</span>
+        <span>&middot;</span>
+        <span>2023</span>
+        <span>&middot;</span>
+        <a class="doi-link" href="https://doi.org/10.1088/1742-6596/2586/1/012156" target="_blank">DOI: 10.1088/1742-6596/2586/1/012156 &#8599;</a>
+      </div>
     </div>
-    <div class="citation-title">Systematics of mean resonance spacing and average radiative width from random forest regression</div>
-    <div class="citation-authors">Bormans, J P &middot; Wyngaardt, S M &middot; Wiedeking, M &middot; Malatji, K L</div>
-    <div class="citation-meta">
-      <span>Journal of Physics: Conference Series</span>
-      <span>&middot;</span>
-      <span>Vol. 2586, p. 012156</span>
-      <span>&middot;</span>
-      <span>2023</span>
-      <span>&middot;</span>
-      <a class="doi-link" href="https://doi.org/10.1088/1742-6596/2586/1/012156" target="_blank">DOI: 10.1088/1742-6596/2586/1/012156 &#8599;</a>
+
+    <div class="citation-divider"></div>
+
+    <!-- Citation 2 -->
+    <div class="citation-entry">
+      <div class="citation-entry-top">
+        <div class="citation-title">Reference Input Parameter Library (RIPL-3)</div>
+        <button class="copy-bibtex-btn" onclick="copyBibtex('ripl')">Copy BibTeX</button>
+      </div>
+      <div class="citation-authors">Capote, R. et al.</div>
+      <div class="citation-meta">
+        <span>Nuclear Data Sheets</span>
+        <span>&middot;</span>
+        <span>Vol. 110, pp. 3107–3214</span>
+        <span>&middot;</span>
+        <span>2009</span>
+        <span>&middot;</span>
+        <a class="doi-link" href="https://doi.org/10.1016/j.nds.2009.10.004" target="_blank">DOI: 10.1016/j.nds.2009.10.004 &#8599;</a>
+      </div>
     </div>
   </div>
 
   <footer>
-    Backend: Flask + gunicorn · Models trained on <span>resonances0.txt</span> (NNDC)<br>
+    Backend: Flask + gunicorn · Models trained on <span>resonances0.txt</span> (RIPL-3)<br>
     D₀ model: max_depth=50 · Γγ model: max_depth=100 · Uncertainty via <span>forestci</span>
   </footer>
 </div>
@@ -709,8 +738,8 @@
 
   document.addEventListener('keydown', e => { if (e.key === 'Enter') runPrediction(); });
 
-  function copyBibtex() {
-    const bibtex = `@article{Bormans_2023,
+  const bibtexEntries = {
+    bormans: `@article{Bormans_2023,
   doi       = {10.1088/1742-6596/2586/1/012156},
   url       = {https://doi.org/10.1088/1742-6596/2586/1/012156},
   year      = {2023},
@@ -722,12 +751,32 @@
   author    = {Bormans, J P and Wyngaardt, S M and Wiedeking, M and Malatji, K L},
   title     = {Systematics of mean resonance spacing and average radiative width from random forest regression},
   journal   = {Journal of Physics: Conference Series}
-}`;
-    navigator.clipboard.writeText(bibtex).then(() => {
-      const btn = document.getElementById('copy-btn');
-      btn.textContent = 'Copied!';
-      btn.classList.add('copied');
-      setTimeout(() => { btn.textContent = 'Copy BibTeX'; btn.classList.remove('copied'); }, 2000);
+}`,
+    ripl: `@article{Capote_2009,
+  doi       = {10.1016/j.nds.2009.10.004},
+  url       = {https://doi.org/10.1016/j.nds.2009.10.004},
+  year      = {2009},
+  publisher = {Elsevier},
+  volume    = {110},
+  number    = {12},
+  pages     = {3107--3214},
+  author    = {Capote, R. and Herman, M. and Oblozinsky, P. and Young, P.G. and Goriely, S. and Belgya, T. and Ignatyuk, A.V. and Koning, A.J. and Hilaire, S. and Plujko, V.A. and Avrigeanu, M. and Bersillon, O. and Chadwick, M.B. and Fukahori, T. and Ge, Z. and Han, Y. and Kailas, S. and Kopecky, J. and Maslov, V.M. and Mills, G. and Mughabghab, S. and Pritychenko, B. and Reffo, G. and Richman, M. and Rugge, H.C. and Rykaczewski, H. and Sin, M. and Talou, P.},
+  title     = {Reference Input Parameter Library ({RIPL}-3)},
+  journal   = {Nuclear Data Sheets}
+}`
+  };
+
+  function copyBibtex(key) {
+    const text = bibtexEntries[key];
+    navigator.clipboard.writeText(text).then(() => {
+      const btns = document.querySelectorAll('.copy-bibtex-btn');
+      btns.forEach(btn => {
+        if (btn.getAttribute('onclick') === \`copyBibtex('\${key}')\`) {
+          btn.textContent = 'Copied!';
+          btn.classList.add('copied');
+          setTimeout(() => { btn.textContent = 'Copy BibTeX'; btn.classList.remove('copied'); }, 2000);
+        }
+      });
     });
   }
 
