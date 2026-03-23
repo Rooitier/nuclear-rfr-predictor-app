@@ -391,7 +391,9 @@
   /* Citation block */
 
   .citation-entry { margin-bottom: 0; }
-  .citation-entry-top { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
+  .citation-entry-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 6px; flex-wrap: wrap; }
+  .citation-entry-top .citation-title { flex: 1; }
+  .citation-entry-top .copy-bibtex-btn { flex-shrink: 0; }
   .citation-divider { border: none; border-top: 1px solid var(--border); margin: 16px 0; }
 
   .citation-block {
